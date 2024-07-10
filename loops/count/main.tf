@@ -5,7 +5,7 @@ resource "aws_instance" "web" {
   instance_type = "t3.micro"
 
   tags = {
-    Name = "test-centos8"
+    Name = var.components[count.index]["name"]
   }
 }
 
@@ -17,4 +17,17 @@ data "aws_ami" "centos8" {
 
 output "publicip" {
     value = aws_instance.web.*.public_ip
+}
+
+variable "components" {
+    default = {
+        cart = {
+            name  = "cart"
+            instance_type = "t3.micro"
+        }
+         cart = {
+            name  = "catalogue"
+            instance_type = "t3.small"
+        }
+    }
 }
