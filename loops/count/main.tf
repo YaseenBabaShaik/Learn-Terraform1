@@ -9,6 +9,13 @@ resource "aws_instance" "web" {
   }
 }
 
+resource "null_resource" "provision" {
+    provisioner "remote-exec" {
+     host = aws_instance.web.public_ip
+           
+    }]
+}
+
 data "aws_ami" "centos8" {
  most_recent  =  true
  name_regex   =  "Centos-8-DevOps-Practice"
@@ -30,4 +37,14 @@ variable "components" {
             instance_type = "t3.small"
         }
     }
+}
+
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic and all outbound traffic"
+  vpc_id      = aws_vpc.main.id
+
+  tags = {
+    Name = "allow_tls"
+  }
 }
